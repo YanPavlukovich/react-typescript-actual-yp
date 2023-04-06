@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
 import Card, { CardVariant } from "./components/Card";
-import { IUser } from "./types/types";
+import { ITodo, IUser } from "./types/types";
 import axios from "axios";
 import List from "./components/List";
 import UserItem from "./components/UserItem";
 
 const App = () => {
   const [users, setUsers] = useState<IUser[]>([]);
+  const [todos, setTodos] = useState<ITodo[]>([]);
 
   useEffect(() => {
     fetchUsers();
+    fetchTodos();
   }, []);
 
   async function fetchUsers() {
@@ -18,6 +20,16 @@ const App = () => {
         "https://jsonplaceholder.typicode.com/users"
       );
       setUsers(response.data);
+    } catch (e) {
+      alert(e);
+    }
+  }
+  async function fetchTodos() {
+    try {
+      const response = await axios.get<ITodo[]>(
+        "https://jsonplaceholder.typicode.com/todos?_limit=10"
+      );
+      setTodos(response.data);
     } catch (e) {
       alert(e);
     }
